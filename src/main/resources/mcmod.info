@@ -1,0 +1,16 @@
+[
+{
+  "modid": "zombierain",
+  "name": "ZombieRain",
+  "description": "Raining zombies!",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["shadowfacts"],
+  "credits": "dmaster8 for the idea",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
