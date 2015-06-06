@@ -13,6 +13,9 @@ public class EventHandler {
 	@SubscribeEvent
 	public void spawnEvent(LivingSpawnEvent.CheckSpawn event) {
 		if (event.entity instanceof EntityZombie) {
+
+			boolean canceled = false;
+
 			if (Config.teleportZombies) {
 				int blockX = (int) Math.floor(event.x);
 				int blockY = (int) Math.floor(event.y);
@@ -20,8 +23,13 @@ public class EventHandler {
 				if (event.world.canBlockSeeTheSky(blockX, blockY, blockZ)) {
 					event.entity.setPosition(event.entity.posX, event.entity.posY + Config.teleportHeight, event.entity.posZ);
 				}
+				if (event.world.getFullBlockLightValue(blockX, blockY, blockZ) >= 7) {
+					canceled = true;
+				}
 			}
-			event.setResult(Event.Result.ALLOW);
+
+			if (!canceled) event.setResult(Event.Result.ALLOW);
+
 		} else {
 			if (Config.disableOtherMobSpawns) {
 				event.setResult(Event.Result.DENY);
