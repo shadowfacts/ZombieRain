@@ -4,7 +4,11 @@ import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.shadowfacts.shadowapi.command.CommandHandler;
+import net.shadowfacts.shadowapi.config.Config;
+import net.shadowfacts.shadowapi.config.ConfigManager;
 
 /**
  * @author shadowfacts
@@ -20,18 +24,15 @@ public class ZombieRain {
 
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
-		Config.load(event);
+		ConfigManager.instance.configDirPath = event.getModConfigurationDirectory().getAbsolutePath();
+		ConfigManager.instance.register("ZombieRain", Configuration.class);
+
 		MinecraftForge.EVENT_BUS.register(new EventHandler());
 	}
 
 	@Mod.EventHandler
-	public void init(FMLInitializationEvent event) {
-
-	}
-
-	@Mod.EventHandler
-	public void postInit(FMLPostInitializationEvent event) {
-
+	public void serverLoad(FMLServerStartingEvent event) {
+		CommandHandler.initCommands(event);
 	}
 
 }

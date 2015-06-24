@@ -32,8 +32,15 @@ minecraft {
 	replace '@VERSION@', "$mod_version"
 }
 
-dependencies {
+repositories {
+	maven {
+		name = "shadowfacts"
+		url = "http://maven.shadowfacts.net"
+	}
+}
 
+dependencies {
+	compile group: "net.shadowfacts", name: "ShadowAPI", version: "1.7.10-2.0.0"
 }
 
 processResources
@@ -50,22 +57,32 @@ processResources
 	}
 }
 
+configurations {
+	includedLibs
+}
+
+dependencies {
+	includedLibs group: "net.shadowfacts", name: "ShadowAPI", version: "1.7.10-2.0.0"
+}
+
+task fatJar(type: Jar) {
+	classifier = 'fat'
+	from {configurations.includedLibs.collect {it.isDirectory() ? it : zipTree(it)}}
+	with jar
+}
+
 task deobfJar(type: Jar) {
-	from sourceSets.main.output
 	classifier = 'deobf'
+	from sourceSets.main.output
+	from {configurations.includedLibs.collect {it.isDirectory() ? it : zipTree(it)}}
 }
 
-task sourcesJar(type: Jar) {
-	from sourceSets.main.allSource
-	classifier = 'sources'
-}
-
-tasks.build.dependsOn deobfJar, sourcesJar
+tasks.build.dependsOn fatJar, deobfJar
 
 artifacts {
 	archives jar
+	archives fatJar
 	archives deobfJar
-	archives sourcesJar
 }
 
 uploadArchives {

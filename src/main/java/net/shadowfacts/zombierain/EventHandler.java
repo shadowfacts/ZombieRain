@@ -16,12 +16,12 @@ public class EventHandler {
 
 			boolean canceled = false;
 
-			if (Config.teleportZombies) {
+			if (Configuration.teleportZombies) {
 				int blockX = (int) Math.floor(event.x);
 				int blockY = (int) Math.floor(event.y);
 				int blockZ = (int) Math.floor(event.z);
 				if (event.world.canBlockSeeTheSky(blockX, blockY, blockZ)) {
-					event.entity.setPosition(event.entity.posX, event.entity.posY + Config.teleportHeight, event.entity.posZ);
+					event.entity.setPosition(event.entity.posX, event.entity.posY + Configuration.teleportHeight, event.entity.posZ);
 				}
 				if (event.world.getFullBlockLightValue(blockX, blockY, blockZ) >= 7) {
 					canceled = true;
@@ -31,7 +31,7 @@ public class EventHandler {
 			if (!canceled) event.setResult(Event.Result.ALLOW);
 
 		} else {
-			if (Config.disableOtherMobSpawns) {
+			if (Configuration.disableOtherMobSpawns) {
 				event.setResult(Event.Result.DENY);
 			}
 		}
