@@ -40,7 +40,7 @@ repositories {
 }
 
 dependencies {
-	compile group: "net.shadowfacts", name: "ShadowAPI", version: "1.7.10-2.0.0"
+	compile group: "net.shadowfacts", name: "ShadowAPI", version: "1.7.10-2.0.2"
 }
 
 processResources
@@ -62,7 +62,7 @@ configurations {
 }
 
 dependencies {
-	includedLibs group: "net.shadowfacts", name: "ShadowAPI", version: "1.7.10-2.0.0"
+	includedLibs group: "net.shadowfacts", name: "ShadowAPI", version: "1.7.10-2.0.2"
 }
 
 task fatJar(type: Jar) {
