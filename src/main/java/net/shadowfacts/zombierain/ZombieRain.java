@@ -30,9 +30,9 @@ public class ZombieRain {
 		MinecraftForge.EVENT_BUS.register(new EventHandler());
 	}
 
-	@Mod.EventHandler
-	public void serverLoad(FMLServerStartingEvent event) {
-		CommandHandler.initCommands(event);
-	}
+//	@Mod.EventHandler
+//	public void serverLoad(FMLServerStartingEvent event) {
+//		CommandHandler.initCommands(event);
+//	}
 
 }
