@@ -39,8 +39,13 @@ repositories {
 	}
 }
 
+configurations {
+	shade
+	compile.extendsFrom shade
+}
+
 dependencies {
-	compile group: "net.shadowfacts", name: "ShadowAPI", version: "1.7.10-2.0.2"
+	shade group: "net.shadowfacts", name: "ShadowAPI", version: "1.7.10-2.2.0"
 }
 
 processResources
@@ -57,32 +62,40 @@ processResources
 	}
 }
 
-configurations {
-	includedLibs
-}
-
-dependencies {
-	includedLibs group: "net.shadowfacts", name: "ShadowAPI", version: "1.7.10-2.0.2"
-}
-
-task fatJar(type: Jar) {
-	classifier = 'fat'
-	from {configurations.includedLibs.collect {it.isDirectory() ? it : zipTree(it)}}
-	with jar
+jar {
+	configurations.shade.each { dep ->
+		from (project.zipTree(dep)) {
+			exclude 'META-INF', 'META-INF/**'
+		}
+	}
 }
 
 task deobfJar(type: Jar) {
-	classifier = 'deobf'
 	from sourceSets.main.output
-	from {configurations.includedLibs.collect {it.isDirectory() ? it : zipTree(it)}}
+	configurations.shade.each { dep ->
+		from (project.zipTree(dep)) {
+			exclude 'META-INF', 'META-INF/**'
+		}
+	}
+	classifier = 'deobf'
 }
 
-tasks.build.dependsOn fatJar, deobfJar
+task sourcesJar(type: Jar) {
+	from sourceSets.main.allSource
+	configurations.shade.each { dep ->
+		from (project.zipTree(dep)) {
+			exclude 'META-INF', 'META-INF/**'
+		}
+	}
+	classifier = 'sources'
+}
+
+tasks.build.dependsOn deobfJar, sourcesJar
 
 artifacts {
 	archives jar
-	archives fatJar
 	archives deobfJar
+	archives sourcesJar
 }
 
 uploadArchives {
